@@ -3,6 +3,11 @@
 ## Project setup
 ```
 npm install
+npm install openai@^4.0.0
+npm install dotenv express openai
+npm install consolidate@latest
+npm install --save-dev @babel/plugin-transform-class-properties
+ npm install --save-dev @vue/cli-plugin-babel
 ```
 
 ### Compiles and hot-reloads for development
