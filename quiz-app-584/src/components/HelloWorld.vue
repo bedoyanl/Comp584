@@ -25,14 +25,7 @@ export default {
           message: this.userMessage,
         });
 
-        // Assuming the OpenAI response is an array of choices
-        const choices = response.data;
-
-        // Extracting the text from each choice
-        const messages = choices.map((choice) => choice?.text || '');
-
-        // Updating the responseMessages array
-        this.responseMessages = messages;
+        this.responseMessages = response.data;
       } catch (error) {
         console.error('Error sending message:', error);
         this.responseMessages = ['An error occurred'];

@@ -15,7 +15,10 @@ const openai = new OpenAI({
 
 // Defining a conversation context prompt
 const conversationContextPrompt =
-  " You are a teacher for a class. Please come up with 10 quiz questions for the human based on the information after the colon:";
+  "You are a teacher for a class. Please come up with 10 quiz questions with 4 options and the correct answer marked for the human based on the information after the colon:";
+
+const additionalContextPrompt = 
+  ". Return it as a JSON array having fields Question, Options and Answer stating index of answer in options array.";
 
 router.use((req, res, next) => {
   console.log(`Request received at ${new Date()}`);
@@ -29,13 +32,18 @@ router.post('/chat', async (req, res) => {
   // Calling the OpenAI API to complete the message
   await openai.completions.create({
     model: 'text-davinci-003',
-    prompt: conversationContextPrompt + message,
+    prompt: conversationContextPrompt + message + additionalContextPrompt,
     max_tokens: 1024,
     
   })
   .then((response) => {
     // Sending the response data back to the client
-    res.send(response.choices);
+    console.log(response);
+    rawText = response.choices[0].text;
+    jsonText = rawText.substring(rawText.indexOf('['));
+    jsonArray = JSON.parse(jsonText)
+    console.log(jsonArray);
+    res.send(jsonArray);
   })
   .catch((error) => {
     // Handle errors
