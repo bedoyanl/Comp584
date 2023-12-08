@@ -1,14 +1,13 @@
 const express = require("express");
-const conf = require("./config/server-config");
+const { configure, port } = require("./config/server-config");
 const history = require("connect-history-api-fallback");
 const { resolve } = require("path");
 
 // Instance
 const instance = express();
-const { port } = conf; // Use the port from the configuration
 
 // API
-conf(instance);
+configure(instance);
 
 // UI
 const publicPath = resolve(__dirname, "../../dist");
