@@ -21,10 +21,11 @@ const additionalContextPrompt =
     'Return it as a JSON array having fields "question", "options" and "answerIndex", spelled exactly as quoted and only with lowercase characters. "question" will contain the question in a string format. ' +
     '"options" will be an array of strings containing 4 different possible answers to the question. "answerIndex" is the index in the "options" array that contains the correct answer. ' +
     "Ensure the JSON array format is correct. Every open { should have an associated closing }. The arrays must start with the bracket [ and end with the bracket ]. Use the following information for the quiz: ";
+
 function cleanUpJsonString(jsonString) {
     jsonString = jsonString.replace(/(\w+)\s*:/g, '"$1":');
     return jsonString;
-    }
+}
 
 router.use((req, res, next) => {
     console.log(`Request received at ${new Date()}`);
