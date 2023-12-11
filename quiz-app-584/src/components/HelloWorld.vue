@@ -17,9 +17,10 @@
       <div class="headerDiv">
         <h2>Your Quiz</h2>
       </div>
+      <button @click="goBack" class="goBackButton">Go Back</button>
       <QuizQuestion v-for="(message, index) in responseMessages" :question="message.question" :options="message.options" :answerIndex="message.answerIndex" :key="index" :questionId="index"/> 
       <button v-if="!showInput" @click="onShowInput" class="buttonClass inputButtonClass">{{inputButtonLabel}}</button>
-      <button @click="goBack">Go Back</button>
+      <button @click="goBack" class="goBackButton">Go Back</button>
         
     </div>
   </div>
@@ -134,5 +135,20 @@ a {
 
 .buttonClass:hover {
   background: linear-gradient(#019ad2, #33bdef);
+}
+
+.goBackButton {
+  /* Add your unique styles here */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 </style>
