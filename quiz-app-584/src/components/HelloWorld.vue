@@ -19,6 +19,8 @@
       </div>
       <QuizQuestion v-for="(message, index) in responseMessages" :question="message.question" :options="message.options" :answerIndex="message.answerIndex" :key="index" :questionId="index"/> 
       <button v-if="!showInput" @click="onShowInput" class="buttonClass inputButtonClass">{{inputButtonLabel}}</button>
+      <button @click="goBack">Go Back</button>
+        
     </div>
   </div>
 </template>
@@ -63,6 +65,9 @@ export default {
     onShowInput() {
       this.showInput = !this.showInput;
     },  
+    goBack() {
+            window.location.reload();
+    }
   },
   components: {
     QuizQuestion,
