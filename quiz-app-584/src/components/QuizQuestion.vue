@@ -1,5 +1,7 @@
+
 <template>
     <div style="width: 100%; max-width: 600px; margin: 0 auto; float: none; background-color: #fff; display: flex; flex-flow: column nowrap;">
+       
         <div style="display: flex; flex-flow: row nowrap;">
             <p style="font-size: 18px; margin-right: 10px;">
                 {{ indexString }}
@@ -20,7 +22,10 @@
 
 <script>
 
+
 export default {
+    
+
     props: {
         questionId: {
             type: Number,
@@ -77,7 +82,7 @@ export default {
             console.log("selected", selected);
             this.selected = selected;
         }
-    },
+    }
 }
 </script>
 
