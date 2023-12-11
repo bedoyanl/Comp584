@@ -1,10 +1,15 @@
 <template>
     <div style="width: 100%; max-width: 600px; margin: 0 auto; float: none; background-color: #fff; display: flex; flex-flow: column nowrap;">
-        <p style="font-size: 18px">
-            {{indexedQuestion}}
-        </p>
+        <div style="display: flex; flex-flow: row nowrap;">
+            <p style="font-size: 18px; margin-right: 10px;">
+                {{ indexString }}
+            </p>
+            <p style="font-size: 18px">
+                {{ question }}
+            </p>
+        </div>
         <div style="display: flex; flex-flow: column nowrap; margin-left: 10px">
-            <div v-for="(option, index) in options" :key="index" :class="{ correctAnswer: answerIndex == index && showAnswer, incorrectAnswer: answerIndex != index && selected == index && showAnswer}" style="display: flex; align-items: center; height: 25px;">
+            <div v-for="(option, index) in options" :key="index" :class="{ correctAnswer: answerIndex == index && showAnswer, incorrectAnswer: answerIndex != index && selected == index && showAnswer}" style="display: flex; align-items: center; min-height: 25px; padding-top: 5px; padding-bottom: 5px">
                 <input @click="setSelected(index)" type="radio" :name="questionId" style="margin-bottom: 2px; margin-right: 10px"/>
                 <label style="font-size: 18px">{{ option }}</label>
             </div>
@@ -47,9 +52,9 @@ export default {
     },
 
     computed: {
-        indexedQuestion: function () {
+        indexString: function () {
             let index = this.questionId + 1;
-            return index + ") " + this.question
+            return index + ")"
         },
 
         showButtonLabel: function() {
