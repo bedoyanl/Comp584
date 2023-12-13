@@ -1,27 +1,37 @@
 <template>
-  <div>
-    <div v-if="responseMessages.length == 0">
-      <textarea v-model="userMessage" placeholder="Type your message"></textarea>
-      <button @click="sendMessage">Send Message</button>
-      <label v-if="errorMessage.length > 0">{{ errorMessage }}</label>
+  <div class="chat-container">
+    <div v-show="responseMessages.length === 0" class="input-section">
+      <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
+      <button @click="sendMessage" class="send-button">Send Message</button>
+      <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
     </div>
-    <div v-if="responseMessages.length > 0" class="questionWrapper">
-      <span v-if="showInput">
+    <div v-show="responseMessages.length > 0" class="question-wrapper">
+      <div v-show="showInput" class="original-input">
         <PopupWindow>
           <p>
             {{ userMessage }}
           </p>
-          <button @click="onShowInput" class="buttonClass inputButtonClass">{{inputButtonLabel}}</button>
+          <button @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
         </PopupWindow>
-      </span>
-      <div class="headerDiv">
+      </div>
+      <div class="header-section">
         <h2>Your Quiz</h2>
       </div>
-      <button @click="goBack" class="goBackButton">Go Back</button>
-      <QuizQuestion v-for="(message, index) in responseMessages" :question="message.question" :options="message.options" :answerIndex="message.answerIndex" :key="index" :questionId="index"/> 
-      <button v-if="!showInput" @click="onShowInput" class="buttonClass inputButtonClass">{{inputButtonLabel}}</button>
-      <button @click="goBack" class="goBackButton">Go Back</button>
-        
+      <button @click="goBack" class="go-back-button">Go Back</button>
+      <div class="quiz-list">
+        <QuizQuestion
+        v-for="(message, index) in responseMessages"
+        :question="message.question" 
+        :options="message.options" 
+        :answerIndex="message.answerIndex" 
+        :key="index" 
+        :questionId="index"
+        class="quiz-question">
+        </QuizQuestion>
+      </div>
+      <button v-if="!showInput" @click="toggleInput" class="toggle-button">{{inputButtonLabel}}
+      </button>
+      <button @click="goBack" class="go-back-button">Go Back</button>
     </div>
   </div>
 </template>
@@ -30,23 +40,26 @@
 import axios from 'axios';
 import QuizQuestion from "./QuizQuestion.vue";
 import PopupWindow from "./PopupWindow.vue";
+import QuizQuestion from './QuizQuestion.vue';
 
 export default {
-  data() {
-    return {
-      userMessage: '',
-      responseMessages: [],
-      errorMessage: '',
-      showInput: false,
-    };
-  },
-
-  computed: {
-    inputButtonLabel() {
-      if (this.showInput) return "Hide Original Input";
-      else return "Show Original Input"
-    }
-  },
+    data() {
+        return {
+            userMessage: '',
+            responseMessages: [],
+            errorMessage: '',
+            showInput: false,
+        };
+    },
+    computed: {
+        inputButtonLabel() {
+            show(this.showInput);
+            return "Hide Original Input";
+        },
+        else: , return: "Show Original Input"
+    },
+    components: { QuizQuestion }
+},
 
   methods: {
     async sendMessage() {
@@ -78,44 +91,102 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.headerDiv {
-  font-size: 40px;
-  align-self: center;
-  max-width: 600px;
+.input-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.message-input {
   width: 100%;
-}
-.question {
-  margin-top: 300px;
-}
-
-.questionWrapper {
-  display: flex; 
-  flex-flow: column nowrap;
-  gap: 60px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
 }
 
-.inputButtonClass {
-  max-width: 600px;
+.send-button{
   width: 100%;
-  height: 30px;
-  font-weight: bold;
-  font-size: 20;
-  align-self: center;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover{
+  background-color: #45a049;
+}
+
+.error-message{
+  color: red;
+}
+
+.question-wrapper{
+  width: 100%;
+  max-width: 800px;
+}
+
+.original-input{
+  margin-bottom: 20px;
+}
+
+.toggle-button{
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-button:hover{
+  background-color: #2980b9;
+}
+
+.header-section{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.go-back-button {
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f44336;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.go-back-button:hover{
+  background-color: #d32f2f;
+}
+
+.quiz-list{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.quiz-question{
+  width: 100%;
 }
 </style>
 
