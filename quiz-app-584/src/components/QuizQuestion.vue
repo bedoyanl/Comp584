@@ -1,31 +1,37 @@
-
 <template>
-    <div style="width: 100%; max-width: 600px; margin: 0 auto; float: none; background-color: #fff; display: flex; flex-flow: column nowrap;">
-       
-        <div style="display: flex; flex-flow: row nowrap;">
-            <p style="font-size: 18px; margin-right: 10px;">
-                {{ indexString }}
-            </p>
-            <p style="font-size: 18px">
-                {{ question }}
-            </p>
+    <div class="quiz-question">
+        <div class="question-header">
+            <p class="index">{{ indexString }}</p>
+            <p class="question-text">{{ question }}</p>
         </div>
-        <div style="display: flex; flex-flow: column nowrap; margin-left: 10px">
-            <div v-for="(option, index) in options" :key="index" :class="{ correctAnswer: answerIndex == index && showAnswer, incorrectAnswer: answerIndex != index && selected == index && showAnswer}" style="display: flex; align-items: center; min-height: 25px; padding-top: 5px; padding-bottom: 5px">
-                <input @click="setSelected(index)" type="radio" :name="questionId" style="margin-bottom: 2px; margin-right: 10px"/>
-                <label style="font-size: 18px">{{ option }}</label>
+       
+        <div class="options-container">
+            <div
+                v-for="(option, index) in options"
+                :key="index"
+                :class="{
+                    correctAnswer: answerIndex === index && showAnswer,
+                    incorrectAnswer: answerIndex !== index && selected === index && showAnswer
+                }"
+                class="option"
+                @click="setSelected(index)"
+            >
+                <input type="radio" :name="`question_${questionId}`" :checked="selected === index" />
+                <label> {{ option }}</label>
             </div>
         </div>
-        <button @click="onShowAnswer" class="buttonClass" style="width: 100px; align-self: flex-end; margin-top: 20px;">{{showButtonLabel}}</button>
+        <button @click="onShowAnswer" class="buttonClass">{{showButtonLabel}}</button>
+    
+
+    <div v-if="showAnswer" class="correct-answer">
+        <p>Correct Answer:</p>
+        <p>{{ options[answerIndex] }}</p>
+    </div>
     </div>
 </template>
 
 <script>
-
-
 export default {
-    
-
     props: {
         questionId: {
             type: Number,
@@ -34,7 +40,7 @@ export default {
 
         question: {
             type: String,
-            default: "Oops, something went wrong. Do you appreciate this default question?"
+            default: "Oops, something went wrong."
         },
 
         options: {
@@ -51,47 +57,89 @@ export default {
     data() {
         return {
             showAnswer: false,
-            showInput: false,
             selected: -1
-        }
+        };
     },
 
     computed: {
-        indexString: function () {
-            let index = this.questionId + 1;
-            return index + ")"
+        indexString() {
+            return `${this.questionId + 1})`;
         },
 
-        showButtonLabel: function() {
-            if (this.showAnswer) return "Hide Answer";
-            else return "Show Answer";
+        showButtonLabel() {
+            return this.showAnswer ? "Hide Answer" : "Show Answer";
         },
-
-        inputButtonLabel: function() {
-            if (this.showInput) return "Hide Original Input";
-            else return "Show Original Input";
-        }
     },
 
     methods: {
-        onShowAnswer: function() {
+        onShowAnswer() {
             this.showAnswer = !this.showAnswer;
         },
-
-        setSelected: function(selected) {
-            console.log("selected", selected);
+        setSelected(selected) {
             this.selected = selected;
         }
     }
-}
+};
 </script>
 
 <style scoped>
-.correctAnswer {
-  background-color: #41B883;
+.quiz-question{
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-.incorrectAnswer {
-  background-color: #bf616a;
+.question-header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.index{
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.question-text{
+    font-size: 18px;
+}
+
+.options-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    width: 100%;
+}
+
+.option{
+    display: flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+input[type="radio"]{
+    margin-right: 10px;
+}
+
+label{
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button{
+    width: 100px;
+    align-self: flex-end;
+    margin-top: 20px;
 }
 </style>

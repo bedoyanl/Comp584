@@ -29,9 +29,11 @@
         class="quiz-question">
         </QuizQuestion>
       </div>
-      <button v-if="!showInput" @click="toggleInput" class="toggle-button">{{inputButtonLabel}}
-      </button>
-      <button @click="goBack" class="go-back-button">Go Back</button>
+      <div class="toggle-buttons">
+        <button v-if="!showInput" @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
+        <br>
+        <button @click="goBack" class="go-back-button">Go Back</button>
+      </div> 
     </div>
   </div>
 </template>
@@ -40,7 +42,6 @@
 import axios from 'axios';
 import QuizQuestion from "./QuizQuestion.vue";
 import PopupWindow from "./PopupWindow.vue";
-import QuizQuestion from './QuizQuestion.vue';
 
 export default {
     data() {
@@ -53,7 +54,7 @@ export default {
     },
     computed: {
         inputButtonLabel() {
-            return this.showInput ? 'Hide Original Input' : 'Show Original Input';
+            return this.showInput ? 'Hide Original Input' : 'Submit Test';
         },
     },
 
@@ -139,12 +140,23 @@ export default {
   margin-bottom: 20px;
 }
 
+.toggle-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center;  */
+  text-align: center;
+  height: 100vh; 
+}
+
 .toggle-button{
-  width: 100%;
+  width: 50%;
   padding: 8px;
   border: none;
   border-radius: 4px;
+  margin-top: 10px;
   background-color: #3498db;
+  align-items: center;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -165,6 +177,7 @@ export default {
   padding: 8px;
   border: none;
   border-radius: 4px;
+  margin-top: 10px;
   background-color: #f44336;
   color: white;
   cursor: pointer;
