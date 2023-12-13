@@ -1,41 +1,43 @@
 <template>
-  <div class="chat-container">
-    <div v-show="responseMessages.length === 0" class="input-section">
-      <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
-      <button @click="sendMessage" class="send-button">Send Message</button>
-      <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
+    <div v-show="responseMessages.length === 0" class="input-wrapper">
+      <div class="input-section">
+        <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
+        <button @click="sendMessage" class="send-button">Send Message</button>
+        <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
+      </div>
     </div>
-    <div v-show="responseMessages.length > 0" class="question-wrapper">
-      <div v-show="showInput" class="original-input">
+    <div v-show="responseMessages.length > 0" class="quiz-wrapper">
+      <div v-show="showInput">
         <PopupWindow>
-          <p>
-            {{ userMessage }}
-          </p>
-          <button @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
+          <div class="popup-content">
+            <h2>Original Input</h2>
+            <p class="old-input-wrapper">
+              {{ userMessage }}
+            </p>
+            <button @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
+          </div>
         </PopupWindow>
       </div>
       <div class="header-section">
         <h2>Your Quiz</h2>
+        <button @click="goBack" class="go-back-button">Go Back</button>
       </div>
-      <button @click="goBack" class="go-back-button">Go Back</button>
-      <div class="quiz-list">
+      <div class="question-wrapper">
         <QuizQuestion
-        v-for="(message, index) in responseMessages"
-        :question="message.question" 
-        :options="message.options" 
-        :answerIndex="message.answerIndex" 
-        :key="index" 
-        :questionId="index"
-        class="quiz-question">
-        </QuizQuestion>
+          v-for="(message, index) in responseMessages"
+          :question="message.question" 
+          :options="message.options" 
+          :answerIndex="message.answerIndex" 
+          :key="index" 
+          :questionId="index"
+        />
       </div>
-      <div class="toggle-buttons">
-        <button v-if="!showInput" @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
+      <div class="bottom-buttons-div">
+        <button @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
         <br>
         <button @click="goBack" class="go-back-button">Go Back</button>
       </div> 
     </div>
-  </div>
 </template>
 
 <script>
@@ -54,7 +56,7 @@ export default {
     },
     computed: {
         inputButtonLabel() {
-            return this.showInput ? 'Hide Original Input' : 'Submit Test';
+            return this.showInput ? 'Hide Original Input' : 'Show Original Input';
         },
     },
 
@@ -69,7 +71,7 @@ export default {
         this.responseMessages = response.data;
       } catch (error) {
         console.error('Error sending message:', error);
-        this.errorMessage = error.response?.data?.message || 'An error occurred';
+        this.errorMessage = error.response?.data?.message || 'An error occurred! Please Try Again.';
       }
     },
 
@@ -88,31 +90,35 @@ export default {
 </script>
 
 <style scoped>
-.chat-container {
+.input-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  padding: 20px;
   font-family: Arial, sans-serif;
+  width: 100%;
 }
 
 .input-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  width: 60%;
+  height: 100%;
+  row-gap: 20px;
+  padding-top: 20px;
 }
 
 .message-input {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+  height: 50vh;
 }
 
-.send-button{
+.send-button {
   width: 100%;
   padding: 8px;
   border: none;
@@ -123,38 +129,46 @@ export default {
   transition: background-color 0.3s;
 }
 
-.send-button:hover{
+.send-button:hover {
   background-color: #45a049;
 }
 
-.error-message{
+.error-message {
   color: red;
 }
 
-.question-wrapper{
-  width: 100%;
-  max-width: 800px;
+.quiz-wrapper {
+  display: flex; 
+  flex-flow: column nowrap;
+}
+
+.question-wrapper {
+  display: flex; 
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 60px;
 }
 
 .original-input{
   margin-bottom: 20px;
 }
 
-.toggle-buttons {
+.bottom-buttons-div {
   display: flex;
   flex-direction: column;
   align-items: center;
   /* justify-content: center;  */
   text-align: center;
-  height: 100vh; 
+  margin-top: 30px;
+  margin-bottom: 10px;
 }
 
-.toggle-button{
-  width: 50%;
+.toggle-button {
+  max-width: 600px;
+  width: 100%;
   padding: 8px;
   border: none;
   border-radius: 4px;
-  margin-top: 10px;
   background-color: #3498db;
   align-items: center;
   color: white;
@@ -168,6 +182,7 @@ export default {
 
 .header-section{
   display:flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
@@ -188,14 +203,21 @@ export default {
   background-color: #d32f2f;
 }
 
-.quiz-list{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.old-input-wrapper {
+  padding: 20px; 
+  border-radius: 5px;   
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 50vh; 
+  max-height: 50%; 
+  overflow-y: scroll;
 }
 
-.quiz-question{
-  width: 100%;
+.popup-content {
+  display: flex; 
+  flex-direction: column; 
+  height: 100%;
+  align-items: center;
 }
 </style>
 

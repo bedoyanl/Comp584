@@ -14,6 +14,7 @@
     background-color: white;
     padding: 20px 20px;
     z-index: 1200;
+    max-height: 80%;
 }
     
 .popupBackground {
