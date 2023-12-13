@@ -4,6 +4,7 @@
         <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
         <button @click="sendMessage" class="send-button">Send Message</button>
         <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
+        <LoadingSpinner v-show="loading" />
       </div>
     </div>
     <div v-show="responseMessages.length > 0" class="quiz-wrapper">
@@ -44,6 +45,7 @@
 import axios from 'axios';
 import QuizQuestion from "./QuizQuestion.vue";
 import PopupWindow from "./PopupWindow.vue";
+import LoadingSpinner from './LoadingSpinner.vue'; 
 
 export default {
     data() {
@@ -52,6 +54,7 @@ export default {
             responseMessages: [],
             errorMessage: '',
             showInput: false,
+            loading: false,
         };
     },
     computed: {
@@ -64,6 +67,7 @@ export default {
     async sendMessage() {
       try {
         this.errorMessage = '';
+        this.loading = true;
         const response = await axios.post('/api/chat', {
           message: this.userMessage,
         });
@@ -72,6 +76,8 @@ export default {
       } catch (error) {
         console.error('Error sending message:', error);
         this.errorMessage = error.response?.data?.message || 'An error occurred! Please Try Again.';
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -85,6 +91,7 @@ export default {
   components: {
     QuizQuestion,
     PopupWindow,
+    LoadingSpinner,
   }
 };
 </script>
