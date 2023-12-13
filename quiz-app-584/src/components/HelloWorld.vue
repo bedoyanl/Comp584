@@ -53,13 +53,9 @@ export default {
     },
     computed: {
         inputButtonLabel() {
-            show(this.showInput);
-            return "Hide Original Input";
+            return this.showInput ? 'Hide Original Input' : 'Show Original Input';
         },
-        else: , return: "Show Original Input"
     },
-    components: { QuizQuestion }
-},
 
   methods: {
     async sendMessage() {
@@ -72,11 +68,11 @@ export default {
         this.responseMessages = response.data;
       } catch (error) {
         console.error('Error sending message:', error);
-        this.errorMessage = 'An error occurred';
+        this.errorMessage = error.response?.data?.message || 'An error occurred';
       }
     },
 
-    onShowInput() {
+    toggleInput() {
       this.showInput = !this.showInput;
     },  
     goBack() {
