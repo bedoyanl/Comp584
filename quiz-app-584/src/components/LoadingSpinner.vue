@@ -10,7 +10,8 @@ export default {
   name: "LoadingSpinner",
 };
 </script>
-  
+
+<!-- Scoped Styles: These styles only exist within the scope of this file. -->
 <style scoped>
 .loading-spinner {
   position: fixed;

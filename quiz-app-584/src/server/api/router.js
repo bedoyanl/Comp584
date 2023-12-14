@@ -1,13 +1,15 @@
-const express = require("express");
-const { OpenAI } = require("openai");
-const axios = require("axios");
-const router = express.Router();
-const bodyParser = require("body-parser");
-require("dotenv").config();
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
+// Importing necessary modules for the code
+const express = require("express"); // Express is a web application framework for Node.js
+const { OpenAI } = require("openai"); // Importing OpenAI module to interact with the OpenAI API
+const axios = require("axios"); // Axios is a promise-based HTTP client for the browser and Node.js
+const router = express.Router(); // Creating an Express router to handle routes
+const bodyParser = require("body-parser"); // Body-parser is used to parse incoming request bodies
+require("dotenv").config(); // Loading environment variables from a .env file
 
-// Initializing the OpenAI API client
+router.use(bodyParser.json()); // Using body-parser middleware to parse JSON requests
+router.use(bodyParser.urlencoded({ extended: true })); // Parsing URL-encoded requests
+
+// Initializing the OpenAI API client with the provided API key
 const openai = new OpenAI({
     key: process.env.OPENAI_API_KEY,
     // Add other configuration options if needed
@@ -27,21 +29,23 @@ function cleanUpJsonString(jsonString) {
     return jsonString;
 }
 
+// Middleware function to log the timestamp of incoming requests
 router.use((req, res, next) => {
     console.log(`Request received at ${new Date()}`);
     next();
 });
 
+// Endpoint to handle POST requests to "/chat"
 router.post("/chat", async (req, res) => {
     // Extracting the user's message from the request body
     const message = req.body.message;
 
-    // Calling the OpenAI API to complete the message
+    // Calling the OpenAI API to complete the message using the text-davinci-003 model
     await openai.completions
         .create({
             model: "text-davinci-003",
             prompt: conversationContextPrompt + message + additionalContextPrompt,
-            max_tokens: 1024,
+            max_tokens: 1024, // Limiting the number of tokens in the response
         })
         .then((response) => {
             // Sending the response data back to the client
@@ -50,6 +54,7 @@ router.post("/chat", async (req, res) => {
             jsonText = rawText.substring(rawText.indexOf("["));
             jsonText = cleanUpJsonString(jsonText); // Remove whitespace
             console.log("jsonText:", jsonText); // Add this line for debugging
+
             try {
                 const jsonArray = JSON.parse(jsonText);
 

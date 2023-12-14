@@ -1,11 +1,17 @@
 <template>
+  <!-- Background div that greys out the content behind the popup window -->
   <div className="popupBackground">
+    <!-- Popup window div with a white background and rounded corners -->
     <div className="popupWindow">
+      <!-- Slots are a feature of the Vue framework that allow the -->
+      <!-- the contents of the popup window to be provided by the  -->
+      <!-- popup window's parent component.                        -->
       <slot />
     </div>
   </div>
 </template>
 
+<!-- Scoped Styles: These styles only exist within the scope of this file. -->
 <style scoped>
 .popupWindow {
   max-width: 600px;
