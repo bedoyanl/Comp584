@@ -1,13 +1,31 @@
 <template>
-    <div v-show="responseMessages.length === 0" class="input-wrapper">
-      <div class="input-section">
-        <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
-        <button @click="sendMessage" class="send-button">Send Message</button>
-        <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
-        <LoadingSpinner v-show="loading" />
+  <div>
+    <!-- Title Page-->
+    <!-- Container for the title of the page -->
+    <div class="title-container" >
+      <div v-if="responseMessages.length === 0">
+        <h1>Welcome to the Quiz App</h1>
       </div>
     </div>
+
+    <!-- Quiz Page -->
+    <!-- Input section for the quiz -->
+      <div v-show="responseMessages.length === 0" class="input-wrapper">
+        <div class="input-section">
+          <textarea v-model="userMessage" placeholder="Type your message" class="message-input"></textarea>
+          <button @click="sendMessage" class="send-button">Send Message</button>
+          <label v-if="errorMessage.length > 0" class="error-message">{{ errorMessage }}</label>
+          <LoadingSpinner v-show="loading" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Wrapper -->
+    <!-- Wrapper for the entire quiz section -->
     <div v-show="responseMessages.length > 0" class="quiz-wrapper">
+
+      <!-- Popup Window -->
+      <!-- Display popup window when showInput is true -->
       <div v-show="showInput">
         <PopupWindow>
           <div class="popup-content">
@@ -19,10 +37,16 @@
           </div>
         </PopupWindow>
       </div>
+
+      <!-- Header Section -->
+      <!-- Header section for the quiz -->
       <div class="header-section">
         <h2>Your Quiz</h2>
         <button @click="goBack" class="go-back-button">Go Back</button>
       </div>
+
+      <!-- Question Wrapper -->
+      <!-- Wrapper for displaying quiz questions -->
       <div class="question-wrapper">
         <QuizQuestion
           v-for="(message, index) in responseMessages"
@@ -33,14 +57,19 @@
           :questionId="index"
         />
       </div>
+
+      <!-- Bottom Buttons Div -->
+      <!-- Container for bottom buttons -->
       <div class="bottom-buttons-div">
         <button @click="toggleInput" class="toggle-button">{{inputButtonLabel}}</button>
         <br>
         <button @click="goBack" class="go-back-button">Go Back</button>
       </div> 
+
     </div>
 </template>
 
+<!-- This is calling from the other files in the folder -->
 <script>
 import axios from 'axios';
 import QuizQuestion from "./QuizQuestion.vue";
@@ -96,7 +125,23 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped> /* CSS styles */
+
+.title-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  background-color: #f5f5f5;
+}
+
+.title-container h1{
+  font-size: 3em;
+  text-align: center;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .input-wrapper {
   display: flex;
   flex-direction: row;
@@ -147,6 +192,7 @@ export default {
 .quiz-wrapper {
   display: flex; 
   flex-flow: column nowrap;
+  align-items: center;
 }
 
 .question-wrapper {
