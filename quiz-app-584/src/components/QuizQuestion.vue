@@ -1,12 +1,32 @@
 <template>
+  <!-- Outter Div for the question. Provides the background color, outline, and dropshadow. -->
   <div class="quiz-question-wrapper">
+    <!-- Div containing the question and answers. -->
     <div class="quiz-question">
+      <!-- Div for the actual question and it's index. -->
       <div class="question-header">
         <p class="index">{{ indexString }}</p>
         <p class="question-text">{{ question }}</p>
       </div>
 
+      <!-- Div that contains the multiple choice options -->
       <div class="options-container">
+        <!-- Div for a single multiple choice option. -->
+
+        <!-- v-for is a list rendering property provided by-->
+        <!-- the Vue framework. It can be used to render a -->
+        <!-- list of items based on the data in an array.  -->
+        <!-- The key property is a unique key required by  -->
+        <!-- the v-for property.                           -->
+
+        <!-- @click is similar to the button property onclick. When  -->
+        <!-- the button is clicked the setSelected method is called. -->
+
+        <!-- By adding a colon (:) before a regular HTML propery Vue -->
+        <!-- will use Javascript to compute the value of the poperty.-->
+        <!-- In this case the class property is either correctAnswer -->
+        <!-- or incorrectAnswer depending on which conditionals are  -->
+        <!-- true.                                                   -->
         <div
           v-for="(option, index) in options"
           :key="index"
@@ -18,18 +38,29 @@
           class="option"
           @click="setSelected(index)"
         >
+          <!-- Radio input for question option. -->
           <input
             type="radio"
             :name="`question_${questionId}`"
             :checked="selected === index"
           />
+          <!-- Label for question option. -->
           <label> {{ option }}</label>
         </div>
       </div>
+
+      <!-- Show Answer Button -->
+      <!-- @click is similar to the button property onclick. When  -->
+      <!-- the button is clicked the onShowAnswer method is called.-->
       <button @click="onShowAnswer" class="buttonClass">
         {{ showButtonLabel }}
       </button>
 
+      <!-- Answer Div -->
+      <!-- v-if is a conditional rendering property    -->
+      <!-- from the Vue framework. When the condition  -->
+      <!-- is true the div is rendered. When it's      -->
+      <!-- false the div is hidden.                    -->
       <div v-if="showAnswer" class="correct-answer">
         <p>Correct Answer:</p>
         <p>{{ options[answerIndex] }}</p>
@@ -40,28 +71,35 @@
 
 <script>
 export default {
+  // Properties provide by the parent component.
+  // This is kind of like parameters for a defualt constructor
   props: {
+    // The id/index for this question.
     questionId: {
       type: Number,
       default: 0,
     },
 
+    // The question string.
     question: {
       type: String,
       default: "Oops, something went wrong.",
     },
 
+    // An array of different multiple-choice options for the question.
     options: {
       type: Array,
       default: () => [],
     },
 
+    // The index of the correct answer in the options array.
     answerIndex: {
       type: Number,
       default: -1,
     },
   },
 
+  // Member variables
   data() {
     return {
       showAnswer: false,
@@ -69,6 +107,7 @@ export default {
     };
   },
 
+  // variables that must be computed during the rendering process
   computed: {
     indexString() {
       return `${this.questionId + 1})`;
@@ -79,10 +118,14 @@ export default {
     },
   },
 
+  // methods used by the component
   methods: {
+    // onShowAnswer toggle's the answer display
     onShowAnswer() {
       this.showAnswer = !this.showAnswer;
     },
+
+    // setSelected sets with option the user selected
     setSelected(selected) {
       this.selected = selected;
     },
@@ -90,6 +133,7 @@ export default {
 };
 </script>
 
+<!-- Scoped Styles: These styles only exist within the scope of this file. -->
 <style scoped>
 .quiz-question {
   background-color: #fff;
@@ -134,6 +178,13 @@ export default {
   min-height: 25px;
   padding: 5px 0;
   cursor: pointer;
+}
+.correctAnswer {
+  background-color: #41b883;
+}
+
+.incorrectAnswer {
+  background-color: #bf616a;
 }
 
 input[type="radio"] {
