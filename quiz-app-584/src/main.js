@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import QuizGenerator from "./QuizGenerator.vue";
 
-createApp(App).mount('#app')
+createApp(QuizGenerator).mount("#app");
