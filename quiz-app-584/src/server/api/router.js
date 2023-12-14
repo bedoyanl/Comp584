@@ -52,38 +52,36 @@ router.post("/chat", async (req, res) => {
             console.log("jsonText:", jsonText); // Add this line for debugging
             try {
                 const jsonArray = JSON.parse(jsonText);
-    
+
                 // Validate the structure of the parsed JSON
                 if (Array.isArray(jsonArray)) {
                     for (const item of jsonArray) {
                         if (
-                            typeof item.question === 'string' &&
+                            typeof item.question === "string" &&
                             Array.isArray(item.options) &&
                             item.options.length === 4 &&
-                            typeof item.answerIndex === 'number' &&
+                            typeof item.answerIndex === "number" &&
                             Number.isInteger(item.answerIndex) &&
                             item.answerIndex >= 0 &&
                             item.answerIndex < 4
-                            ) {
+                        ) {
                             // Valid structure for a quiz question
                             console.log("Valid JSON structure:", item);
-                     } else {
+                        } else {
                             // Invalid structure, handle accordingly
-                          console.error("Invalid JSON structure:", item);
-                      }
-                  }
+                            console.error("Invalid JSON structure:", item);
+                        }
+                    }
 
-                  res.send(jsonArray);
-             } else {
-                  console.error("Invalid JSON array format");
-                   res.status(500).send("Internal Server Error");
-              }
-                } catch (error) {
+                    res.send(jsonArray);
+                } else {
+                    console.error("Invalid JSON array format");
+                    res.status(500).send("Internal Server Error");
+                }
+            } catch (error) {
                 console.error("JSON Parsing Error:", error);
                 res.status(500).send("Internal Server Error");
             }
-
-
         })
         .catch((error) => {
             // Handle errors
